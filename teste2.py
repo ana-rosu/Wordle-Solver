@@ -1,48 +1,63 @@
-from scipy.stats import entropy
-import math
+import threading
+from math import log
+
 permutari_fisier = open('permutari.txt')
-permutari_lista = permutari_fisier.read().split()
-cuvinte = open('cuvinte_wordle.txt').read().split() #lista
-cuvinte2 = cuvinte.copy()
-def remove_word(lista,ch):
-    for el in list(lista):
+permutari_lista = set(permutari_fisier.read().split('\n'))
+cuvinte = set(open('cuvinte_wordle.txt').read().split())
+
+
+
+def remove_word0(multime, ch):
+    for el in set(multime):
         if ch in el:
-            lista.remove(el)
-def entropy1(lista):
+            multime.remove(el)
+
+
+def remove_word1(multime, ch, indice):
+    for el in set(multime):
+        if ch in el and ch != el[indice]:
+            multime.remove(el)
+
+
+def remove_word2(multime, ch, indice):
+    for el in set(multime):
+        if ch not in el and ch == el[indice]:
+            multime.remove(el)
+
+
+def entropy1(multime):
     # l = [(el * (-math.log2(el)) for el in lista)]
-    l=[]
-    for el in lista:
-        l.append(el * (-math.log2(el)))
-    print(l)
-    return sum(l)
+    entropy = 0
+    for el in multime:
+        entropy -= el * log(el, 2)
+    return entropy
+
 
 def parcurgere():
-   # while open('cuvinte_wordle.txt').read():
-        max=0
-        cuvinte = open('cuvinte_wordle.txt').read().split() #lista
-        for cuv in cuvinte:
-      #      copie = open('copie_cuvinte.txt').read().split() #lista
-          #  copie = []
-          #   copie = cuvinte.copy()
-            prob = []
-            for cod in permutari_lista:
-                copie = cuvinte.copy()
-                n = len(copie)
-                for i, cifra in enumerate(str(cod)):
-                    if cifra == '0':
-                        remove_word(copie, cuv[i])
-                ramase = len(copie)
-                prob.append(ramase/n)
-            print(entropy(prob, base=2))
-            if entropy(prob, base=2) > max:
-                max = entropy(prob, base=2)
-                guess = cuv
+    max = 0
+    f = open('cuvinte_wordle.txt')
+    cuvinte = set(f.read().split('\n'))
+    for cuv in cuvinte:
+        prob = []
+        for cod in permutari_lista:
+            copie = cuvinte.intersection()
+            n = len(copie)
+            for i, cifra in enumerate(cod):
+                if cifra == '0':
+                    remove_word0(copie, cuv[i])
+                #if cifra == '2':
+                #    remove_word2(copie, cuv[i], i)
+                #if cifra == '1':
+                #    remove_word1(copie, cuv[i], i)
+            ramase = len(copie)
+            prob.append(ramase / n)
+        ent = (entropy1(prob))
+        print(prob, ent, cuv, sep = '\n')
+        if ent > max:
+            max = ent
+            guess = cuv
+        break
 
-        print(guess)
+    #print(guess)
 
 parcurgere()
-
-
-
-
-
