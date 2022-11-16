@@ -2,9 +2,9 @@ import random
 import colorama
 from colorama import Back, Fore
 colorama.init(autoreset=True)
-#cuvinte = open("cuvinte_wordle.txt")
-#cuvant = random.choice(cuvinte.read().split())
-cuvant = 'DELIA'
+cuvinte = open("cuvinte_wordle.txt")
+cuvant = random.choice(cuvinte.read().split())
+#cuvant = 'DELIA'
 L = [0] * 5
 while True:
     guess = input("Dati cuvant: ")
