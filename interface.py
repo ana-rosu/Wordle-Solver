@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter.ttk import *
 import os
 def wordle():
-    os.system('main.py')
+    os.system('base.py')
 root = Tk()
 root.title('Wordle')
 root.geometry('500x700')

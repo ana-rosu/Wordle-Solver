@@ -7,6 +7,6 @@ def permute(list, s):
          for y in permute(1, s)
          for x in permute(list - 1, s)
       ]
-f = open('permutari.txt', 'a')
+f = open('coduri.txt', 'a')
 f.write(('\n'.join(permute(5, ['0','1','2']))))
 

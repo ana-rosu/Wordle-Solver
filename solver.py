@@ -1,10 +1,8 @@
 import threading as th
 from math import log
 
-permutari_fisier = open('permutari.txt')
-permutari_lista = set(permutari_fisier.read().split('\n'))
+permutari_set = set(open('coduri.txt').read().split('\n'))
 cuvinte = set(open('cuvinte_wordle.txt').read().split())
-
 
 
 def remove_word0(multime, ch):
@@ -12,7 +10,7 @@ def remove_word0(multime, ch):
         if ch in el:
             multime.remove(el)
 
-
+#pastrez doar cuvintele care contin ch pe alta pozitie
 def remove_word1(multime, ch, indice):
     for el in multime.copy():
         if ch not in el or (ch in el and ch == el[indice]):
@@ -35,18 +33,20 @@ def entropy1(multime):
 
 
 def parcurgere(nr):
+    global ghiciri
     max = 0
     f = open('cuvinte_wordle.txt')
     if nr == 0:
-        cuvinte = set(f.read(8592).split('\n'))
-        cuvinte.discard('')
+        cuvinte1 = set(f.read().split('\n'))
+        cuvinte1.discard('')
     elif nr != 0:
         f.read(8592*nr)
-        cuvinte = set(f.read(8592).split('\n'))
-        cuvinte.discard('')
-    for cuv in cuvinte:
+        cuvinte1 = set(f.read(8592).split('\n'))
+        cuvinte1.discard('')
+
+    for cuv in cuvinte1:
         prob = []
-        for cod in permutari_lista:
+        for cod in permutari_set:
             copie = cuvinte.intersection()
             n = len(copie)
             for i, cifra in enumerate(cod):
@@ -59,16 +59,13 @@ def parcurgere(nr):
             ramase = len(copie)
             prob.append(ramase / n)
         ent = (entropy1(prob))
-        #print(ent, cuv, sep = '\n')
+        print(ent, cuv, sep = '\n')
         if ent > max:
             max = ent
             guess = cuv
-    maxime.append(max)
-    ghiciri.append(cuv)
+    ghiciri[max] = guess
 
-
-maxime=[]
-ghiciri=[]
+ghiciri = {}
 t1 = th.Thread(target = parcurgere, args=(0,))
 t2 = th.Thread(target = parcurgere, args=(1,))
 t3 = th.Thread(target = parcurgere, args=(2,))
@@ -96,4 +93,5 @@ t6.join()
 t7.join()
 t8.join()
 
-print(ghiciri[maxime[max(maxime)]], max(maxime))  #list indices must be integers or slices, not float - de reparat
+cuvant_optim = 'TAREI'
+# print(max(ghiciri), ghiciri[max(ghiciri)])
