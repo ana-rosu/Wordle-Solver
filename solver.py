@@ -1,16 +1,14 @@
 import threading as th
 from math import log
-
-permutari_set = set(open('coduri.txt').read().split('\n'))
-cuvinte = set(open('cuvinte_wordle.txt').read().split())
-
+import time
 
 def remove_word0(multime, ch):
     for el in multime.copy():
         if ch in el:
             multime.remove(el)
 
-#pastrez doar cuvintele care contin ch pe alta pozitie
+
+# pastrez doar cuvintele care contin ch pe alta pozitie
 def remove_word1(multime, ch, indice):
     for el in multime.copy():
         if ch not in el or (ch in el and ch == el[indice]):
@@ -32,23 +30,27 @@ def entropy1(multime):
     return entropy
 
 
-def parcurgere(nr):
+def parcurgere():
     global ghiciri
+    # f2 = open('communication.txt', 'r')
+    # comunicare = set(f2.read().split('\n'))
+    # comunicare.discard('')
     max = 0
-    f = open('cuvinte_wordle.txt')
-    if nr == 0:
-        cuvinte1 = set(f.read().split('\n'))
-        cuvinte1.discard('')
-    elif nr != 0:
-        f.read(8592*nr)
-        cuvinte1 = set(f.read(8592).split('\n'))
-        cuvinte1.discard('')
+    guess = ''
+    # if nr == 0:
+    #     cuvinte1 = set(f2.read(int(len(comunicare))).split('\n'))
+    #     cuvinte1.discard('')
+    # elif nr != 0:
+    #     f2.read(len(comunicare) * nr)
+    #     cuvinte1 = set(f2.read(int(len(comunicare))).split('\n'))
+    #     cuvinte1.discard('')
 
-    for cuv in cuvinte1:
+    for cuv in comunicare:
         prob = []
-        for cod in permutari_set:
-            copie = cuvinte.intersection()
+        for cod in coduri_set:
+            copie = comunicare.intersection()
             n = len(copie)
+            #t = {}
             for i, cifra in enumerate(cod):
                 if cifra == '0':
                     remove_word0(copie, cuv[i])
@@ -59,39 +61,45 @@ def parcurgere(nr):
             ramase = len(copie)
             prob.append(ramase / n)
         ent = (entropy1(prob))
-        print(ent, cuv, sep = '\n')
-        if ent > max:
+        #print(ent, cuv, sep='\n')
+        if ent >= max:
             max = ent
             guess = cuv
     ghiciri[max] = guess
 
+
+
+
+f1 = open('coduri.txt')
+f2 = open('communication.txt', 'r')
+comunicare = set(f2.read().split('\n'))
+comunicare.discard('')
+coduri_set = set(f1.read().split('\n'))
+f1, f2.close()
 ghiciri = {}
-t1 = th.Thread(target = parcurgere, args=(0,))
-t2 = th.Thread(target = parcurgere, args=(1,))
-t3 = th.Thread(target = parcurgere, args=(2,))
-t4 = th.Thread(target = parcurgere, args=(3,))
-t5 = th.Thread(target = parcurgere, args=(4,))
-t6 = th.Thread(target = parcurgere, args=(5,))
-t7 = th.Thread(target = parcurgere, args=(6,))
-t8 = th.Thread(target = parcurgere, args=(7,))
+guess = ''
+# t1 = th.Thread(target=parcurgere, args=(0,))
+# t2 = th.Thread(target=parcurgere, args=(1,))
+# t3 = th.Thread(target=parcurgere, args=(2,))
+# t4 = th.Thread(target=parcurgere, args=(3,))
+# t5 = th.Thread(target=parcurgere, args=(4,))
+# t6 = th.Thread(target=parcurgere, args=(5,))
+#
+# t1.start()
+# t2.start()
+# t3.start()
+# t4.start()
+# t5.start()
+# t6.start()
+#
+# t1.join()
+# t2.join()
+# t3.join()
+# t4.join()
+# t5.join()
+# t6.join()
 
-t1.start()
-t2.start()
-t3.start()
-t4.start()
-t5.start()
-t6.start()
-t7.start()
-t8.start()
-
-t1.join()
-t2.join()
-t3.join()
-t4.join()
-t5.join()
-t6.join()
-t7.join()
-t8.join()
-
-cuvant_optim = 'TAREI'
-# print(max(ghiciri), ghiciri[max(ghiciri)])
+parcurgere()
+f2 = open('communication.txt', 'w')
+f2.write(ghiciri[max(ghiciri)])
+f2.close()

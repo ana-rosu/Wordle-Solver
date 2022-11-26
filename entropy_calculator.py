@@ -1,18 +1,13 @@
-import multiprocessing as mp
-import time
+import threading as th
 from math import log
-
-permutari_set = set(open('coduri.txt').read().split('\n'))
-cuvinte = set(open('cuvinte_wordle.txt').read().split())
-
 
 def remove_word0(multime, ch):
     for el in multime.copy():
         if ch in el:
             multime.remove(el)
+#pastrez doar cuvintele care contin ch pe alta pozitie
 
 
-# pastrez doar cuvintele care contin ch pe alta pozitie
 def remove_word1(multime, ch, indice):
     for el in multime.copy():
         if ch not in el or (ch in el and ch == el[indice]):
@@ -35,20 +30,18 @@ def entropy1(multime):
 
 
 def parcurgere(nr):
-    global ghiciri
     max = 0
     f = open('cuvinte_wordle.txt')
     if nr == 0:
         cuvinte1 = set(f.read(8592).split('\n'))
         cuvinte1.discard('')
     elif nr != 0:
-        f.read(8592 * nr)
+        f.read(8592*nr)
         cuvinte1 = set(f.read(8592).split('\n'))
         cuvinte1.discard('')
-
     for cuv in cuvinte1:
         prob = []
-        for cod in permutari_set:
+        for cod in coduri_set:
             copie = cuvinte.intersection()
             n = len(copie)
             for i, cifra in enumerate(cod):
@@ -61,44 +54,42 @@ def parcurgere(nr):
             ramase = len(copie)
             prob.append(ramase / n)
         ent = (entropy1(prob))
-        print(ent, cuv, sep='\n')
-        if ent > max:
-            max = ent
-            guess = cuv
-    ghiciri[max] = guess
+        dict_ent[cuv] = ent
 
 
-ghiciri = {}
-if __name__ == "__main__":
-    p1 = mp.Process(target=parcurgere, args=(0,))
-    p2 = mp.Process(target=parcurgere, args=(1,))
-    p3 = mp.Process(target=parcurgere, args=(2,))
-    p4 = mp.Process(target=parcurgere, args=(3,))
-    p5 = mp.Process(target=parcurgere, args=(4,))
-    p6 = mp.Process(target=parcurgere, args=(5,))
-    p7 = mp.Process(target=parcurgere, args=(6,))
-    p8 = mp.Process(target=parcurgere, args=(7,))
+dict_ent = {}
+f1 = open('coduri.txt')
+f2 = open('cuvinte_wordle.txt')
+f3 = open('entropies.txt', 'w')
+coduri_set = set(f1.read().split('\n'))
+cuvinte = set(f2.read().split())
 
-    start = time.time()
-    p1.start()
-    p2.start()
-    p3.start()
-    p4.start()
-    p5.start()
-    p6.start()
-    p7.start()
-    p8.start()
+t1 = th.Thread(target = parcurgere, args=(0,))
+t2 = th.Thread(target = parcurgere, args=(1,))
+t3 = th.Thread(target = parcurgere, args=(2,))
+t4 = th.Thread(target = parcurgere, args=(3,))
+t5 = th.Thread(target = parcurgere, args=(4,))
+t6 = th.Thread(target = parcurgere, args=(5,))
+t7 = th.Thread(target = parcurgere, args=(6,))
+t8 = th.Thread(target = parcurgere, args=(7,))
 
-    p1.join()
-    p2.join()
-    p3.join()
-    p4.join()
-    p5.join()
-    p6.join()
-    p7.join()
-    p8.join()
-    end = time.time()
-    print(end-start)
-    print(max(ghiciri), ghiciri[max(ghiciri)])
-# cuvant_optim = 'TAREI'
+t1.start()
+t2.start()
+t3.start()
+t4.start()
+t5.start()
+t6.start()
+t7.start()
+t8.start()
 
+t1.join()
+t2.join()
+t3.join()
+t4.join()
+t5.join()
+t6.join()
+t7.join()
+t8.join()
+
+for key, value in sorted(dict_ent.items(), key=lambda dict_ent: dict_ent[1], reverse=True):
+    f3.write(f'{key} : {value}\n')
