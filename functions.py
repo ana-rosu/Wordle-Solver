@@ -1,6 +1,4 @@
 from math import log
-import colorama
-from colorama import Fore, Back
 import subprocess
 import sys
 
@@ -61,4 +59,4 @@ def solve(cnt):
         f2 = open('communication.txt', 'w')
         f2.writelines("\n".join(cuvinte))
         f2.close()
-        subprocess.call([sys.executable, 'C:/Users/Flavia/PycharmProjects/Wordle-Solver/solver.py'])
+        subprocess.call([sys.executable, './solver.py'])

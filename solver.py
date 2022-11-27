@@ -1,7 +1,7 @@
 from functions import remove_word1, remove_word2, remove_word0, entropy1
 
 def parcurgere():
-    global ghiciri
+    global ghiciri, ramase
     max = 0
     guess = ''
     for cuv in comunicare:

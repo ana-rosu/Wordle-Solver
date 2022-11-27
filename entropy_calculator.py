@@ -1,36 +1,7 @@
 import threading as th
-from math import log
-
-def remove_word0(multime, ch):
-    for el in multime.copy():
-        if ch in el:
-            multime.remove(el)
-#pastrez doar cuvintele care contin ch pe alta pozitie
-
-
-def remove_word1(multime, ch, indice):
-    for el in multime.copy():
-        if ch not in el or (ch in el and ch == el[indice]):
-            multime.remove(el)
-
-
-def remove_word2(multime, ch, indice):
-    for el in multime.copy():
-        if ch != el[indice]:
-            multime.remove(el)
-
-
-def entropy1(multime):
-    # l = [(el * (-math.log2(el)) for el in lista)]
-    entropy = 0
-    for el in multime:
-        if el > 0:
-            entropy -= el * log(el, 2)
-    return entropy
-
+from functions import remove_word1, remove_word2, remove_word0, entropy1
 
 def parcurgere(nr):
-    max = 0
     f = open('cuvinte_wordle.txt')
     if nr == 0:
         cuvinte1 = set(f.read(8592).split('\n'))
