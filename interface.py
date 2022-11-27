@@ -1,15 +1,31 @@
 from tkinter import *
 from tkinter.ttk import *
-import os
-def wordle():
-    os.system('base.py')
+from functions import solve
+import random
+
+cuvinte = set(open('cuvinte_wordle.txt').read().split('\n'))
+cuvant = random.choice(open('cuvinte_wordle.txt').read().split('\n'))
+cnt = 0
+
 root = Tk()
 root.title('Wordle')
 root.geometry('500x700')
-label = Label(root, text='Wordle', background = '#67c1d5', foreground = 'white',width=87, anchor=CENTER, ).place(x=0, y=0)
-frame = Frame(root).place(x=200, y=300)
-button = Button(frame, text='START', command= lambda: wordle()).place(x=200,y=300)
-frameexit = Frame(root, relief='flat').place(x=420,y=20)
-exit = Button(frameexit, text='Quit', command= lambda:root.quit()).place(x=420,y=20)
 
+
+GREEN = '#6baa64'
+YELLOW = '#c9b459'
+WHITE = '#f9fdfa'
+GREY = '#787c7f'
+BLACK = '#000000'
+width = -5
+height = 0
+root.config(bg=BLACK)
+label = Label(root, text=' W O R D L E ', background = BLACK, foreground = WHITE, anchor=CENTER, font=('Neue Helvetica', 60, 'bold', 'underline')).place(x=-5,y=0)
+#label1 = Label(root, text=' '.join(cuvant).upper(), background = BLACK, foreground=WHITE, anchor=CENTER, font=('Neue Helvetica', 60, 'bold')).grid(row=1, column=0)
+frame = Frame(root).place(x=500, y=300)
+
+
+
+
+root.resizable(False, False)
 root.mainloop()
