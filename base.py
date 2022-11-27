@@ -2,7 +2,7 @@ import random
 import colorama
 import subprocess
 import sys
-from solver import remove_word0, remove_word1, remove_word2
+from functions import remove_word1, remove_word2, remove_word0
 from colorama import Back, Fore
 colorama.init(autoreset=True)
 
@@ -18,7 +18,7 @@ def solve():
         if cuvant == guess:
             open('communication.txt', 'w')
             print(f'{Fore.BLACK}{Back.GREEN}{cuvant}', 'Solved', f'Number of tries: {cnt}', sep='\n')
-            break
+            return
         for i, litera in enumerate(guess):
             if litera == cuvant[i]:
                 print(f'{Fore.BLACK}{Back.GREEN}{litera}', end='')
@@ -34,7 +34,7 @@ def solve():
         f2 = open('communication.txt', 'w')
         f2.writelines("\n".join(cuvinte))
         f2.close()
-        subprocess.call([sys.executable, 'C:/Users/Flavia/PycharmProjects/Wordle-Solver/solver.py'])
+        subprocess.call([sys.executable, './solver.py'])
 
 
 cuvinte = set(open('cuvinte_wordle.txt').read().split('\n'))

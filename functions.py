@@ -33,9 +33,9 @@ def entropy1(multime):
     return entropy
 
 
-def solve():
-    while True:
-        global cnt, cuvinte, cuvant
+def solve(cnt):
+    # while True:
+        global cuvinte, cuvant
         f2 = open('communication.txt', 'r')
         if cnt == 0:
             guess = 'TAREI'
