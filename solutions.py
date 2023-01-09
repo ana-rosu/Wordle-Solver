@@ -55,5 +55,5 @@ for cuvant in copie:
 
 for key, value in solutions.items():
     value = ', '.join(map(str, value))
-    solutii.write(f'{key} : {value}\n')
+    solutii.write(f'{key} , {value}\n')
 solutii.write(f'Incercari medii : {total_incercari/len(copie)}')
